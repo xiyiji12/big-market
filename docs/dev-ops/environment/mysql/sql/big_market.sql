@@ -1,3 +1,20 @@
+# ************************************************************
+# Sequel Ace SQL dump
+# 版本号： 20050
+#
+# https://sequel-ace.com/
+# https://github.com/Sequel-Ace/Sequel-Ace
+#
+# 主机: 127.0.0.1 (MySQL 5.6.39)
+# 数据库: big_market
+# 生成时间: 2024-01-13 06:15:50 +0000
+# ************************************************************
+
+
+
+SET NAMES utf8mb4;
+
+
 CREATE database if NOT EXISTS `big_market` default character set utf8mb4 collate utf8mb4_0900_ai_ci;
 use `big_market`;
 
@@ -18,7 +35,6 @@ CREATE TABLE `award` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `award` WRITE;
-/* !40000 ALTER TABLE `award` DISABLE KEYS */
 
 INSERT INTO `award` (`id`, `award_id`, `award_key`, `award_config`, `award_desc`, `create_time`, `update_time`)
 VALUES
@@ -33,7 +49,6 @@ VALUES
     (9,109,'openai_model','gpt-4,dall-e-2,dall-e-3','OpenAI 增加模型','2023-12-09 11:07:06','2023-12-09 11:12:39'),
     (10,100,'user_credit_blacklist','1','黑名单积分','2024-01-06 12:30:40','2024-01-06 12:30:46');
 
-/* !40000 ALTER TABLE `award` ENABLE KEYS */
 UNLOCK TABLES;
 
 
@@ -54,13 +69,13 @@ CREATE TABLE `strategy` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `strategy` WRITE;
-/* !40000 ALTER TABLE `strategy` DISABLE KEYS */
 
 INSERT INTO `strategy` (`id`, `strategy_id`, `strategy_desc`, `rule_models`, `create_time`, `update_time`)
 VALUES
-    (1,100001,'抽奖策略','rule_weight,rule_blacklist','2023-12-09 09:37:19','2023-12-09 18:06:34');
+    (1,100001,'抽奖策略','rule_weight,rule_blacklist','2023-12-09 09:37:19','2023-12-09 18:06:34'),
+    (2,100003,'抽奖策略-验证lock',NULL,'2024-01-13 10:34:06','2024-01-13 10:34:06'),
+    (3,100002,'抽奖策略-非完整1概率',NULL,'2023-12-09 09:37:19','2024-01-13 11:08:20');
 
-/* !40000 ALTER TABLE `strategy` ENABLE KEYS */
 UNLOCK TABLES;
 
 
@@ -87,7 +102,6 @@ CREATE TABLE `strategy_award` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `strategy_award` WRITE;
-/* !40000 ALTER TABLE `strategy_award` DISABLE KEYS */
 
 INSERT INTO `strategy_award` (`id`, `strategy_id`, `award_id`, `award_title`, `award_subtitle`, `award_count`, `award_count_surplus`, `award_rate`, `rule_models`, `sort`, `create_time`, `update_time`)
 VALUES
@@ -102,9 +116,11 @@ VALUES
     (9,100001,109,'解锁全部模型','抽奖6次后解锁',1,1,0.0001,'rule_lock,rule_luck_award',9,'2023-12-09 09:46:39','2023-12-09 12:20:50'),
     (10,100002,101,'随机积分',NULL,1,1,0.5000,'rule_random,rule_luck_award',1,'2023-12-09 09:46:39','2023-12-23 14:23:51'),
     (11,100002,102,'5次使用',NULL,1,1,0.1000,'rule_random,rule_luck_award',2,'2023-12-09 09:46:39','2023-12-23 14:23:52'),
-    (12,100002,106,'增加dall-e-2画图模型',NULL,1,1,0.0100,'rule_random,rule_luck_award',3,'2023-12-09 09:46:39','2023-12-23 14:23:53');
+    (12,100002,106,'增加dall-e-2画图模型',NULL,1,1,0.0100,'rule_random,rule_luck_award',3,'2023-12-09 09:46:39','2023-12-23 14:23:53'),
+    (13,100003,107,'增加dall-e-3画图模型','抽奖1次后解锁',200,200,0.0400,'rule_lock,rule_luck_award',7,'2023-12-09 09:45:38','2023-12-23 14:01:02'),
+    (14,100003,108,'增加100次使用','抽奖2次后解锁',199,199,0.0099,'rule_lock,rule_luck_award',8,'2023-12-09 09:46:02','2024-01-13 10:26:29'),
+    (15,100003,109,'解锁全部模型','抽奖6次后解锁',1,1,0.0001,'rule_lock,rule_luck_award',9,'2023-12-09 09:46:39','2023-12-09 12:20:50');
 
-/* !40000 ALTER TABLE `strategy_award` ENABLE KEYS */
 UNLOCK TABLES;
 
 
@@ -128,7 +144,6 @@ CREATE TABLE `strategy_rule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `strategy_rule` WRITE;
-/* !40000 ALTER TABLE `strategy_rule` DISABLE KEYS */
 
 INSERT INTO `strategy_rule` (`id`, `strategy_id`, `award_id`, `rule_type`, `rule_model`, `rule_value`, `rule_desc`, `create_time`, `update_time`)
 VALUES
@@ -145,4 +160,9 @@ VALUES
     (11,100001,105,2,'rule_luck_award','1,50','兜底奖品50以内随机积分','2023-12-09 10:30:43','2023-12-09 12:56:00'),
     (12,100001,106,2,'rule_luck_award','1,60','兜底奖品60以内随机积分','2023-12-09 10:30:43','2023-12-09 12:56:00'),
     (13,100001,NULL,1,'rule_weight','4000:102,103,104,105 5000:102,103,104,105,106,107 6000:102,103,104,105,106,107,108,109','消耗6000分，必中奖范围','2023-12-09 10:30:43','2023-12-31 14:51:50'),
-    (14,100001,NULL,1,'rule_blacklist','100:user001,user002,user003','黑名单抽奖，积分兜底','2023-12-09 12:59:45','2024-01-06 14:05:34');
+    (14,100001,NULL,1,'rule_blacklist','100:user001,user002,user003','黑名单抽奖，积分兜底','2023-12-09 12:59:45','2024-01-06 14:05:34'),
+    (15,100003,107,2,'rule_lock','1','抽奖1次后解锁','2023-12-09 10:16:41','2023-12-09 12:55:53'),
+    (16,100003,108,2,'rule_lock','2','抽奖2次后解锁','2023-12-09 10:17:43','2024-01-13 10:56:48'),
+    (17,100003,109,2,'rule_lock','6','抽奖6次后解锁','2023-12-09 10:17:43','2023-12-09 12:55:54');
+
+

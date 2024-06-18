@@ -2,7 +2,7 @@ package com.wenying.domain.strategy.service.rule.impl;
 
 import com.wenying.domain.strategy.model.entity.RuleActionEntity;
 import com.wenying.domain.strategy.model.entity.RuleMatterEntity;
-import com.wenying.domain.strategy.model.vo.RuleLogicCheckTypeVO;
+import com.wenying.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.domain.strategy.service.annotation.LogicStrategy;
 import com.wenying.domain.strategy.service.rule.ILogicFilter;

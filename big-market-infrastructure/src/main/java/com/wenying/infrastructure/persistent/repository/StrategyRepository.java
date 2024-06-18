@@ -3,6 +3,7 @@ package com.wenying.infrastructure.persistent.repository;
 import com.wenying.domain.strategy.model.entity.StrategyAwardEntity;
 import com.wenying.domain.strategy.model.entity.StrategyEntity;
 import com.wenying.domain.strategy.model.entity.StrategyRuleEntity;
+import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVo;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.infrastructure.persistent.dao.IStrategyAwardDao;
 import com.wenying.infrastructure.persistent.dao.IStrategyDao;
@@ -12,6 +13,8 @@ import com.wenying.infrastructure.persistent.po.StrategyAward;
 import com.wenying.infrastructure.persistent.po.StrategyRule;
 import com.wenying.infrastructure.persistent.redis.IRedisService;
 import com.wenying.types.common.Constants;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -23,6 +26,7 @@ import java.util.Map;
  * 策略仓储实现
  */
 @Repository
+@Slf4j
 public class StrategyRepository implements IStrategyRepository {
 
     @Resource
@@ -125,6 +129,21 @@ public class StrategyRepository implements IStrategyRepository {
     }
 
 
+    /**
+     * 抽奖中
+     * @param strategyId
+     * @param awardId
+     * @return
+     */
+    @Override
+    public StrategyAwardRuleModelVo queryStrategyAwardRuleModel(Long strategyId, Integer awardId) {
+        StrategyAward strategyAward = new StrategyAward();
+        strategyAward.setStrategyId(strategyId);
+        strategyAward.setAwardId(awardId);
+        String ruleModels = strategyAwardDao.queryStrategyAwardRuleModels(strategyAward);
+        return StrategyAwardRuleModelVo.builder().ruleModels(ruleModels).build();
+    }
+
 
     /**
      * 往redis里面存抽奖策略范围值
@@ -159,6 +178,7 @@ public class StrategyRepository implements IStrategyRepository {
      */
     @Override
     public int getRateRange(String key) {
+
         return redisService.getValue(Constants.RedisKey.STRATEGY_RATE_RANGE_KEY + key);
     }
 

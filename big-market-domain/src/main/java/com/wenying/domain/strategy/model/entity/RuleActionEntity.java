@@ -1,6 +1,6 @@
 package com.wenying.domain.strategy.model.entity;
 
-import com.wenying.domain.strategy.model.vo.RuleLogicCheckTypeVO;
+import com.wenying.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import lombok.*;
 
 /**
