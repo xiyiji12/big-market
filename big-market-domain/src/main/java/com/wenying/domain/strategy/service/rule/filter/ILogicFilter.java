@@ -1,4 +1,4 @@
-package com.wenying.domain.strategy.service.rule;
+package com.wenying.domain.strategy.service.rule.filter;
 
 import com.wenying.domain.strategy.model.entity.RuleActionEntity;
 import com.wenying.domain.strategy.model.entity.RuleMatterEntity;

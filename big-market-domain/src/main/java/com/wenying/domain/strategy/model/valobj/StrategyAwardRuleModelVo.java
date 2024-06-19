@@ -1,6 +1,6 @@
 package com.wenying.domain.strategy.model.valobj;
 
-import com.wenying.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import com.wenying.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import com.wenying.types.common.Constants;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
