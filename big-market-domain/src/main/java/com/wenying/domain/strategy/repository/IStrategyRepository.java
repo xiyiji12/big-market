@@ -3,7 +3,7 @@ package com.wenying.domain.strategy.repository;
 import com.wenying.domain.strategy.model.entity.StrategyAwardEntity;
 import com.wenying.domain.strategy.model.entity.StrategyEntity;
 import com.wenying.domain.strategy.model.entity.StrategyRuleEntity;
-import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVo;
+import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public interface IStrategyRepository {
     String queryStrategyRuleValue(Long strategyId, Integer awardId, String ruleModel);
     String queryStrategyRuleValue(Long strategyId, String ruleModel);
 
-    StrategyAwardRuleModelVo queryStrategyAwardRuleModel(Long strategyId, Integer awardId);
+    StrategyAwardRuleModelVO queryStrategyAwardRuleModel(Long strategyId, Integer awardId);
 }
 
 

@@ -4,7 +4,7 @@ import com.wenying.domain.strategy.model.entity.RaffleAwardEntity;
 import com.wenying.domain.strategy.model.entity.RaffleFactorEntity;
 import com.wenying.domain.strategy.model.entity.RuleActionEntity;
 import com.wenying.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
-import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVo;
+import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.domain.strategy.service.armory.IStrategyDispatch;
 import com.wenying.domain.strategy.service.rule.chain.ILogicChain;
@@ -50,7 +50,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
 
         //3.查询奖品规则：抽奖中（拿到奖品ID时，过滤规则）、抽奖后（扣减完奖品库存后过滤，抽奖中拦截和无库存则走兜底）
-       StrategyAwardRuleModelVo strategyAwardRuleModelVo = repository.queryStrategyAwardRuleModel(strategyId, awardId);
+       StrategyAwardRuleModelVO strategyAwardRuleModelVo = repository.queryStrategyAwardRuleModel(strategyId, awardId);
 
        //4.抽奖中 - 规则过滤
         RuleActionEntity<RuleActionEntity.RaffleCenterEntity> ruleActionCenterEntity = this.doCheckRaffleCenterLogic(RaffleFactorEntity.builder()
