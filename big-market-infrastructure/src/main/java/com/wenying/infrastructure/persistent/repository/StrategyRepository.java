@@ -3,14 +3,10 @@ package com.wenying.infrastructure.persistent.repository;
 import com.wenying.domain.strategy.model.entity.StrategyAwardEntity;
 import com.wenying.domain.strategy.model.entity.StrategyEntity;
 import com.wenying.domain.strategy.model.entity.StrategyRuleEntity;
-import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
+import com.wenying.domain.strategy.model.valobj.*;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
-import com.wenying.infrastructure.persistent.dao.IStrategyAwardDao;
-import com.wenying.infrastructure.persistent.dao.IStrategyDao;
-import com.wenying.infrastructure.persistent.dao.IStrategyRuleDao;
-import com.wenying.infrastructure.persistent.po.Strategy;
-import com.wenying.infrastructure.persistent.po.StrategyAward;
-import com.wenying.infrastructure.persistent.po.StrategyRule;
+import com.wenying.infrastructure.persistent.dao.*;
+import com.wenying.infrastructure.persistent.po.*;
 import com.wenying.infrastructure.persistent.redis.IRedisService;
 import com.wenying.types.common.Constants;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +37,19 @@ public class StrategyRepository implements IStrategyRepository {
     @Resource
     private IRedisService redisService;
 
+    @Resource
+    private IRuleTreeDao ruleTreeDao;
+
+    @Resource
+    private IRuleTreeNodeDao ruleTreeNodeDao;
+
+    @Resource
+    private IRuleTreeNodeLineDao ruleTreeNodeLineDao;
+
     /**
      * 根据策略id查策略奖品表的记录转化为实体对象  然后缓存到redis中
      * big_market_strategy_award_key_
+     *
      * @param strategyId
      * @return
      */
@@ -76,6 +83,7 @@ public class StrategyRepository implements IStrategyRepository {
     /**
      * 根据策略id查策略表的记录转化为实体对象  然后缓存到redis中
      * big_market_strategy_key_
+     *
      * @param strategyId
      * @return
      */
@@ -98,6 +106,7 @@ public class StrategyRepository implements IStrategyRepository {
     /**
      * 根据策略id+规则查策略规则表的记录转化为实体对象
      * 没存在redis
+     *
      * @param strategyId
      * @param ruleModel
      * @return
@@ -129,18 +138,19 @@ public class StrategyRepository implements IStrategyRepository {
 
     @Override
     public String queryStrategyRuleValue(Long strategyId, String ruleModel) {
-        return queryStrategyRuleValue(strategyId,null,ruleModel);
+        return queryStrategyRuleValue(strategyId, null, ruleModel);
     }
 
 
     /**
      * 抽奖中
+     *
      * @param strategyId
      * @param awardId
      * @return
      */
     @Override
-    public StrategyAwardRuleModelVO queryStrategyAwardRuleModel(Long strategyId, Integer awardId) {
+    public StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId) {
         StrategyAward strategyAward = new StrategyAward();
         strategyAward.setStrategyId(strategyId);
         strategyAward.setAwardId(awardId);
@@ -152,6 +162,7 @@ public class StrategyRepository implements IStrategyRepository {
     /**
      * 往redis里面存抽奖策略范围值
      * big_market_strategy_rate_range_key_
+     *
      * @param key
      * @param rateRange
      * @param shuffleStrategyAwardSearchRateTable
@@ -167,6 +178,7 @@ public class StrategyRepository implements IStrategyRepository {
 
     /**
      * 生成随机策略的概率范围
+     *
      * @param strategyId
      * @return
      */
@@ -177,6 +189,7 @@ public class StrategyRepository implements IStrategyRepository {
 
     /**
      * 生成权重策略的概率范围并存到redis
+     *
      * @param key
      * @return
      */
@@ -189,6 +202,7 @@ public class StrategyRepository implements IStrategyRepository {
     /**
      * 往redis里面存抽奖策略表
      * big_market_strategy_rate_table_key_
+     *
      * @param key
      * @param rateKey
      * @return
@@ -196,6 +210,66 @@ public class StrategyRepository implements IStrategyRepository {
     @Override
     public Integer getStrategyAwardAssemble(String key, Integer rateKey) {
         return redisService.getFromMap(Constants.RedisKey.STRATEGY_RATE_TABLE_KEY + key, rateKey);
+    }
+
+    /**
+     * 往redis存tree节点信息
+     *
+     * @param treeId
+     * @return
+     */
+    @Override
+    public RuleTreeVO queryRuleTreeVOByTreeId(String treeId) {
+
+        // 优先从缓存获取
+        String cacheKey = Constants.RedisKey.RULE_TREE_VO_KEY + treeId;
+        RuleTreeVO ruleTreeVOCache = redisService.getValue(cacheKey);
+        if (null != ruleTreeVOCache) return ruleTreeVOCache;
+
+        // 从数据库获取
+        RuleTree ruleTree = ruleTreeDao.queryRuleTreeByTreeId(treeId);//获取树根节点信息
+        List<RuleTreeNode> ruleTreeNodes = ruleTreeNodeDao.queryRuleTreeNodeListByTreeId(treeId);//获取所有节点信息
+        List<RuleTreeNodeLine> ruleTreeNodeLines = ruleTreeNodeLineDao.queryRuleTreeNodeLineListByTreeId(treeId);//获取连线信息
+
+        // 1. tree node line 转换成Map结构
+        Map<String, List<RuleTreeNodeLineVO>> ruleTreeNodeLineMap = new HashMap<>();
+        for (RuleTreeNodeLine ruleTreeNodeLine : ruleTreeNodeLines) {
+            RuleTreeNodeLineVO ruleTreeNodeLineVO = RuleTreeNodeLineVO.builder()
+                    .treeId(ruleTreeNodeLine.getTreeId())
+                    .ruleNodeFrom(ruleTreeNodeLine.getRuleNodeFrom())
+                    .ruleNodeTo(ruleTreeNodeLine.getRuleNodeTo())
+                    .ruleLimitType(RuleLimitTypeVO.valueOf(ruleTreeNodeLine.getRuleLimitType()))
+                    .ruleLimitValue(RuleLogicCheckTypeVO.valueOf(ruleTreeNodeLine.getRuleLimitValue()))
+                    .build();
+
+            List<RuleTreeNodeLineVO> ruleTreeNodeLineVOList = ruleTreeNodeLineMap.computeIfAbsent(ruleTreeNodeLine.getRuleNodeFrom(), k -> new ArrayList<>());
+            ruleTreeNodeLineVOList.add(ruleTreeNodeLineVO);
+        }
+
+        // 2. tree node 转换为Map结构
+        Map<String, RuleTreeNodeVO> treeNodeMap = new HashMap<>();
+        for (RuleTreeNode ruleTreeNode : ruleTreeNodes) {
+            RuleTreeNodeVO ruleTreeNodeVO = RuleTreeNodeVO.builder()
+                    .treeId(ruleTreeNode.getTreeId())
+                    .ruleKey(ruleTreeNode.getRuleKey())
+                    .ruleDesc(ruleTreeNode.getRuleDesc())
+                    .ruleValue(ruleTreeNode.getRuleValue())
+                    .treeNodeLineVOList(ruleTreeNodeLineMap.get(ruleTreeNode.getRuleKey()))
+                    .build();
+            treeNodeMap.put(ruleTreeNode.getRuleKey(), ruleTreeNodeVO);
+        }
+
+        // 3. 构建 Rule Tree
+        RuleTreeVO ruleTreeVODB = RuleTreeVO.builder()
+                .treeId(ruleTree.getTreeId())
+                .treeName(ruleTree.getTreeName())
+                .treeDesc(ruleTree.getTreeDesc())
+                .treeRootRuleNode(ruleTree.getTreeRootRuleKey())
+                .treeNodeMap(treeNodeMap)
+                .build();
+
+        redisService.setValue(cacheKey, ruleTreeVODB);//如果缓存没有存进去
+        return ruleTreeVODB;
     }
 
 

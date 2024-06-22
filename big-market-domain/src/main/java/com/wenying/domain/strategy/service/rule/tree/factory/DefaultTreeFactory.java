@@ -36,14 +36,14 @@ public class DefaultTreeFactory {
     public static class TreeActionEntity{//决策完是放行了还是拦截了，返回结果
 
         private RuleLogicCheckTypeVO ruleLogicCheckTypeVO;
-        private StrategyAwardData strategyAwardData;
+        private StrategyAwardVO strategyAwardVO;
     }
 
     @Data
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class StrategyAwardData{//决策完最终返回的结果
+    public static class StrategyAwardVO{//决策完最终返回的结果
 
         /** 奖品id */
         private Integer awardId;

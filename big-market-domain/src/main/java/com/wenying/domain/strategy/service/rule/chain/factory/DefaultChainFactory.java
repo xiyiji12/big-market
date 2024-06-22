@@ -3,6 +3,7 @@ package com.wenying.domain.strategy.service.rule.chain.factory;
 import com.wenying.domain.strategy.model.entity.StrategyEntity;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.domain.strategy.service.rule.chain.ILogicChain;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -42,4 +43,24 @@ public class DefaultChainFactory {
         return logicChain;//返回责任链里的第一个节点：如：rule_weight
 
     }
+    @Data
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class StrategyAwardVO {
+        private Integer awardId;
+        private String logicModel;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum LogicModel {
+        RULE_DEFAULT("rule_default","默认抽奖"),
+        RULE_BLACKLIST("rule_blacklist","黑名单抽奖"),
+        RULE_WEIGHT("rule_weight","权重规则"),
+        ;
+        private final String code;
+        private final String info;
+    }
+
 }
