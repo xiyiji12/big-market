@@ -7,9 +7,8 @@
 #
 # 主机: 127.0.0.1 (MySQL 5.6.39)
 # 数据库: big_market
-# 生成时间: 2024-02-03 03:59:20 +0000
+# 生成时间: 2024-02-10 02:29:27 +0000
 # ************************************************************
-
 
 
 SET NAMES utf8mb4;
@@ -99,7 +98,7 @@ LOCK TABLES `rule_tree_node` WRITE;
 INSERT INTO `rule_tree_node` (`id`, `tree_id`, `rule_key`, `rule_desc`, `rule_value`, `create_time`, `update_time`)
 VALUES
     (1,'tree_lock','rule_lock','限定用户已完成N次抽奖后解锁','1','2024-01-27 10:03:09','2024-02-03 10:40:18'),
-    (2,'tree_lock','rule_luck_award','兜底奖品随机积分','1,100','2024-01-27 10:03:09','2024-02-03 10:40:19'),
+    (2,'tree_lock','rule_luck_award','兜底奖品随机积分','101:1,100','2024-01-27 10:03:09','2024-02-08 19:59:43'),
     (3,'tree_lock','rule_stock','库存扣减规则',NULL,'2024-01-27 10:04:43','2024-02-03 10:40:21');
 
 UNLOCK TABLES;
@@ -126,9 +125,9 @@ LOCK TABLES `rule_tree_node_line` WRITE;
 
 INSERT INTO `rule_tree_node_line` (`id`, `tree_id`, `rule_node_from`, `rule_node_to`, `rule_limit_type`, `rule_limit_value`, `create_time`, `update_time`)
 VALUES
-    (1,'tree_lock','rule_lock','rule_stock','EQUAL','ALLOW','2024-01-03 10:40:25','2024-02-03 10:40:25'),
-    (2,'tree_lock','rule_lock','rule_luck_award','EQUAL','TAKE_OVER','2024-01-03 10:40:25','2024-02-03 10:40:26'),
-    (3,'tree_lock','rule_stock','rule_luck_award','EQUAL','TAKE_OVER','2024-01-03 10:40:25','2024-02-03 10:40:27');
+    (1,'tree_lock','rule_lock','rule_stock','EQUAL','ALLOW','2023-12-09 09:37:19','2024-02-03 10:40:25'),
+    (2,'tree_lock','rule_lock','rule_luck_award','EQUAL','TAKE_OVER','2023-12-09 09:37:19','2024-02-03 10:40:26'),
+    (3,'tree_lock','rule_stock','rule_luck_award','EQUAL','TAKE_OVER','2023-12-09 09:37:19','2024-02-03 10:40:27');
 
 UNLOCK TABLES;
 
@@ -186,6 +185,7 @@ CREATE TABLE `strategy_award` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 LOCK TABLES `strategy_award` WRITE;
+/*!40000 ALTER TABLE `strategy_award` DISABLE KEYS */;
 
 INSERT INTO `strategy_award` (`id`, `strategy_id`, `award_id`, `award_title`, `award_subtitle`, `award_count`, `award_count_surplus`, `award_rate`, `rule_models`, `sort`, `create_time`, `update_time`)
 VALUES
@@ -210,8 +210,8 @@ VALUES
     (19,100005,103,'随机积分',NULL,80000,80000,0.0300,'rule_random',1,'2023-12-09 09:38:31','2024-01-21 22:19:45'),
     (20,100005,104,'随机积分',NULL,80000,80000,0.0300,'rule_random',1,'2023-12-09 09:38:31','2024-01-21 22:19:48'),
     (21,100005,105,'随机积分',NULL,80000,80000,0.0010,'rule_random',1,'2023-12-09 09:38:31','2024-01-21 22:25:24'),
-    (22,100006,101,'随机积分',NULL,3,3,0.0300,'tree_lock',1,'2023-12-09 09:38:31','2024-02-03 11:17:05'),
-    (23,100006,102,'随机积分',NULL,97,97,0.9700,'tree_lock',1,'2023-12-09 09:38:31','2024-02-03 11:17:10');
+    (22,100006,101,'随机积分',NULL,3,1,0.0300,'tree_lock',1,'2023-12-09 09:38:31','2024-02-10 09:55:55'),
+    (23,100006,102,'5次使用',NULL,97,82,0.9700,'tree_lock',1,'2023-12-09 09:38:31','2024-02-10 09:57:45');
 
 UNLOCK TABLES;
 

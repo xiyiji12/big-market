@@ -2,6 +2,7 @@ package com.wenying.domain.strategy.service.raffle;
 
 import com.wenying.domain.strategy.model.valobj.RuleTreeVO;
 import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
+import com.wenying.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.domain.strategy.service.AbstractRaffleStrategy;
 import com.wenying.domain.strategy.service.armory.IStrategyDispatch;
@@ -55,5 +56,28 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
         }
         IDecisionTreeEngine treeEngine = defaultTreeFactory.openLogicTree(ruleTreeVO);//规则树工厂
         return treeEngine.process(userId, strategyId, awardId);//规则树抽奖，走整个树的判断流程最终返回抽奖信息
+    }
+
+    /**
+     *
+     * 实现查队列里的值
+     * @return
+     * @throws InterruptedException
+     */
+    @Override
+    public StrategyAwardStockKeyVO takeQueueValue() throws InterruptedException {
+        return repository.takeQueueValue();
+    }
+
+    /**
+     * 实现更新数据库的功能
+     * @param strategyId 策略ID
+     * @param awardId    奖品ID
+     */
+    @Override
+    public void updateStrategyAwardStock(Long strategyId, Integer awardId) {
+
+        repository.updateStrategyAwardStock(strategyId,awardId);
+
     }
 }

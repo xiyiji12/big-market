@@ -2,12 +2,8 @@ package com.wenying.domain.strategy.service;
 
 import com.wenying.domain.strategy.model.entity.RaffleAwardEntity;
 import com.wenying.domain.strategy.model.entity.RaffleFactorEntity;
-import com.wenying.domain.strategy.model.entity.RuleActionEntity;
-import com.wenying.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
-import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.domain.strategy.service.armory.IStrategyDispatch;
-import com.wenying.domain.strategy.service.rule.chain.ILogicChain;
 import com.wenying.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
 import com.wenying.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import com.wenying.types.enums.ResponseCode;
@@ -20,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
  * 模板方法
  */
 @Slf4j
-public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
+public abstract class AbstractRaffleStrategy implements IRaffleStrategy,IRaffleStock {
 
     // 策略仓储服务 -> domain层像一个大厨，仓储层提供米面粮油
     protected IStrategyRepository repository;

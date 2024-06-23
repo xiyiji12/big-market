@@ -5,6 +5,7 @@ import com.wenying.domain.strategy.model.entity.StrategyEntity;
 import com.wenying.domain.strategy.model.entity.StrategyRuleEntity;
 import com.wenying.domain.strategy.model.valobj.RuleTreeVO;
 import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
+import com.wenying.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 
 import java.util.List;
 import java.util.Map;
@@ -31,8 +32,27 @@ public interface IStrategyRepository {
 
     StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId);
 
+    /**
+     * 根据规则树id，查询树结构信息
+     * @param treeId 规则树id
+     * @return  树结构信息
+     */
     RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
 
+    /**
+     * 缓存奖品库存
+     * @param cacheKey   key
+     * @param awardCount 库存值
+     */
+    void cacheStrategyAwardCount(String cacheKey, Integer awardCount);
+
+    Boolean subtractionAwardStock(String cacheKey);
+
+    void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO);
+
+    StrategyAwardStockKeyVO takeQueueValue();
+
+    void updateStrategyAwardStock(Long strategyId, Integer awardId);
 }
 
 

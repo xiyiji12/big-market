@@ -13,27 +13,35 @@
         <result column="award_rate" property="awardRate"/>
         <result column="rule_models" property="ruleModels"/>
         <result column="sort" property="sort"/>
-        <result column="update_time" property="createTime"/>
+        <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
 
+
     <select id="queryStrategyAwardList"  resultMap="dataMap">
         SELECT strategy_id
-        FROM big_market.strategy_award
+        FROM strategy_award
         limit 10
     </select>
 
      <select id="queryStrategyAwardListByStrategyId" parameterType="java.lang.Long" resultMap="dataMap">
         select strategy_id, award_id, award_count, award_count_surplus, award_rate
-        from big_market.strategy_award
+        from strategy_award
         where strategy_id = #{strategyId}
     </select>
 
       <select id="queryStrategyAwardRuleModels" parameterType="com.wenying.infrastructure.persistent.po.StrategyAward" resultType="java.lang.String">
         select rule_models
-        from big_market.strategy_award
+        from strategy_award
         where strategy_id = #{strategyId} and award_id = #{awardId}
     </select>
+
+
+    <update id="updateStrategyAwardStock" parameterType="com.wenying.infrastructure.persistent.po.StrategyAward">
+        update strategy_award
+        set award_count_surplus = award_count_surplus - 1
+        where strategy_id = #{strategyId} and award_id = #{awardId} and award_count_surplus > 0
+    </update>
 
 
 </mapper>

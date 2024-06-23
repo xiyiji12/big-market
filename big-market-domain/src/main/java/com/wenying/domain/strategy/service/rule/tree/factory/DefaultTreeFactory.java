@@ -35,7 +35,7 @@ public class DefaultTreeFactory {
     @NoArgsConstructor
     public static class TreeActionEntity{//决策完是放行了还是拦截了，返回结果
 
-        private RuleLogicCheckTypeVO ruleLogicCheckTypeVO;
+        private RuleLogicCheckTypeVO ruleLogicCheckType;
         private StrategyAwardVO strategyAwardVO;
     }
 
