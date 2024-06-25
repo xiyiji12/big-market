@@ -1,10 +1,13 @@
 package com.wenying.domain.strategy.service.raffle;
 
+import com.wenying.domain.strategy.model.entity.StrategyAwardEntity;
 import com.wenying.domain.strategy.model.valobj.RuleTreeVO;
 import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import com.wenying.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 import com.wenying.domain.strategy.repository.IStrategyRepository;
 import com.wenying.domain.strategy.service.AbstractRaffleStrategy;
+import com.wenying.domain.strategy.service.IRaffleAward;
+import com.wenying.domain.strategy.service.IRaffleStock;
 import com.wenying.domain.strategy.service.armory.IStrategyDispatch;
 import com.wenying.domain.strategy.service.rule.chain.ILogicChain;
 import com.wenying.domain.strategy.service.rule.chain.factory.DefaultChainFactory;
@@ -13,12 +16,14 @@ import com.wenying.domain.strategy.service.rule.tree.factory.engine.IDecisionTre
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * 继承抽象类AbstractRaffleStrategy的子类，实现默认的抽奖策略实现
  */
 @Service
 @Slf4j
-public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
+public class DefaultRaffleStrategy extends AbstractRaffleStrategy implements IRaffleAward, IRaffleStock {
 
 
     public DefaultRaffleStrategy(IStrategyRepository repository, IStrategyDispatch strategyDispatch, DefaultChainFactory defaultChainFactory, DefaultTreeFactory defaultTreeFactory) {
@@ -79,5 +84,10 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
 
         repository.updateStrategyAwardStock(strategyId,awardId);
 
+    }
+
+    @Override
+    public List<StrategyAwardEntity> queryRaffleStrategyAwardList(Long strategyId) {
+        return repository.queryStrategyAwardList(strategyId);
     }
 }

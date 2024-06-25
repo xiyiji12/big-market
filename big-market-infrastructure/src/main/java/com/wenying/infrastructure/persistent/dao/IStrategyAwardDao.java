@@ -13,10 +13,12 @@ import java.util.List;
 public interface IStrategyAwardDao {
     List<StrategyAward> queryStrategyAwardList();
 
-    List<StrategyAward> queryStrategyAwardListByStrategyId(Long strategyId);
+    List<StrategyAward> queryStrategyAwardListByStrategyId(Long strategyId);//奖品列表
 
     String queryStrategyAwardRuleModels(StrategyAward strategyAward);
 
     void updateStrategyAwardStock(StrategyAward strategyAward);
+
+    StrategyAward queryStrategyAward(StrategyAward strategyAwardReq);//奖品信息
     // void updateStrategyAwardStock(Long strategyId,Integer awardId);
 }

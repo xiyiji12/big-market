@@ -12,7 +12,7 @@
         <module>big-market-domain</module>
         <module>big-market-trigger</module>
         <module>big-market-infrastructure</module>
-        <module>big-market-types</module>
+        <module>big-market-types</module><module>big-market-api</module>
     </modules>
 
     <repositories>
