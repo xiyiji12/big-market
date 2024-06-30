@@ -37,7 +37,8 @@ services:
     ports:
       - 3000:3000
     environment:
-      - API_HOST_URL=http://127.0.0.1:8091 # 如果后期部署云上记得把IP地址改成云服务器的地址
+      # - API_HOST_URL=http://127.0.0.1:8091 # 如果后期部署云上记得把IP地址改成云服务器的地址
+      - API_HOST_URL=http://116.198.236.43:8091
       - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
     healthcheck:
       test: [ "CMD", "wget", "--spider", "-q", "http://0.0.0.0:3000/" ]
