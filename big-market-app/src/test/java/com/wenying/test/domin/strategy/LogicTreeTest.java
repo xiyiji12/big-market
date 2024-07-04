@@ -1,9 +1,9 @@
-package com.wenying.test.domin;
+package com.wenying.test.domin.strategy;
 
-import com.wenying.domain.strategy.model.valobj.*;
-import com.wenying.domain.strategy.service.rule.tree.factory.engine.IDecisionTreeEngine;
-import com.wenying.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import com.alibaba.fastjson2.JSON;
+import com.wenying.domain.strategy.model.valobj.*;
+import com.wenying.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
+import com.wenying.domain.strategy.service.rule.tree.factory.engine.IDecisionTreeEngine;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,9 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * @author Fuzhengwei bugstack.cn @小傅哥
  * @description 规则树测试
- * @create 2024-01-27 13:23
  */
 @Slf4j
 @RunWith(SpringRunner.class)

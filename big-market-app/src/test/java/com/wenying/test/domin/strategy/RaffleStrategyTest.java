@@ -1,4 +1,4 @@
-package com.wenying.test.domin;
+package com.wenying.test.domin.strategy;
 
 import com.alibaba.fastjson.JSON;
 import com.wenying.domain.strategy.model.entity.RaffleAwardEntity;
@@ -8,7 +8,6 @@ import com.wenying.domain.strategy.service.armory.IStrategyArmory;
 import com.wenying.domain.strategy.service.rule.chain.impl.RuleWeightLogicChain;
 import com.wenying.domain.strategy.service.rule.tree.impl.RuleLockLogicTreeNode;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,10 +1,9 @@
-package com.wenying.test.domin;
+package com.wenying.test.domin.strategy;
 
 import com.wenying.domain.strategy.service.armory.IStrategyArmory;
 import com.wenying.domain.strategy.service.armory.IStrategyDispatch;
 import com.wenying.infrastructure.persistent.redis.IRedisService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.redisson.api.RMap;
