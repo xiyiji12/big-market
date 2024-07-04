@@ -13,13 +13,13 @@
 
     <select id="queryStrategyList"  resultMap="dataMap">
         SELECT strategy_id
-        FROM big_market.strategy
+        FROM strategy
         limit 10
     </select>
 
     <select id="queryStrategyByStrategyId" parameterType="java.lang.Long" resultMap="dataMap">
         SELECT strategy_id,strategy_desc,rule_models
-        FROM big_market.strategy
+        FROM strategy
         WHERE strategy_id = #{strategyId}
     </select>
 

@@ -94,6 +94,17 @@
             <groupId>com.wenying</groupId>
             <artifactId>big-market-infrastructure</artifactId>
         </dependency>
+
+         <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-random-core</artifactId>
+            </dependency>
+
+          <dependency>
+            <groupId>cn.bugstack.middleware</groupId>
+            <artifactId>db-router-spring-boot-starter</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

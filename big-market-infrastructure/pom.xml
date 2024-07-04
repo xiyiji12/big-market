@@ -24,11 +24,21 @@
             <artifactId>redisson-spring-boot-starter</artifactId>
         </dependency>
 
+          <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-random-core</artifactId>
+            </dependency>
+
+          <dependency>
+            <groupId>cn.bugstack.middleware</groupId>
+            <artifactId>db-router-spring-boot-starter</artifactId>
+        </dependency>
+
         <!-- 系统模块 -->
         <dependency>
             <groupId>com.wenying</groupId>
             <artifactId>big-market-domain</artifactId>
-        </dependency><dependency><groupId>org.redisson</groupId><artifactId>redisson</artifactId><version>3.23.4</version><scope>compile</scope></dependency>
+        </dependency><dependency><groupId>org.redisson</groupId><artifactId>redisson</artifactId><version>3.23.4</version><scope>compile</scope></dependency><dependency><groupId>cn.bugstack.middleware</groupId><artifactId>db-router-spring-boot-starter</artifactId></dependency>
     </dependencies>
 
     <build>

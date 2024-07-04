@@ -23,7 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 抽奖服务，实现IRaffleService接口
+ * @author Fuzhengwei bugstack.cn @小傅哥
+ * @description 营销抽奖服务
+ * @create 2024-02-14 09:21
  */
 @Slf4j
 @RestController()
@@ -50,10 +52,10 @@ public class RaffleController implements IRaffleService {
     public Response<Boolean> strategyArmory(@RequestParam Long strategyId) {
         try {
             log.info("抽奖策略装配开始 strategyId：{}", strategyId);
-            boolean armoryStatus = strategyArmory.assembleLotteryStrategy(strategyId);//完成装配
+            boolean armoryStatus = strategyArmory.assembleLotteryStrategy(strategyId);
             Response<Boolean> response = Response.<Boolean>builder()
-                    .code(ResponseCode.SUCCESS.getCode())//0000
-                    .info(ResponseCode.SUCCESS.getInfo())//成功
+                    .code(ResponseCode.SUCCESS.getCode())
+                    .info(ResponseCode.SUCCESS.getInfo())
                     .data(armoryStatus)
                     .build();
             log.info("抽奖策略装配完成 strategyId：{} response: {}", strategyId, JSON.toJSONString(response));
@@ -61,8 +63,8 @@ public class RaffleController implements IRaffleService {
         } catch (Exception e) {
             log.error("抽奖策略装配失败 strategyId：{}", strategyId, e);
             return Response.<Boolean>builder()
-                    .code(ResponseCode.UN_ERROR.getCode())//0001
-                    .info(ResponseCode.UN_ERROR.getInfo())//失败
+                    .code(ResponseCode.UN_ERROR.getCode())
+                    .info(ResponseCode.UN_ERROR.getInfo())
                     .build();
         }
     }
@@ -79,7 +81,7 @@ public class RaffleController implements IRaffleService {
     @Override
     public Response<List<RaffleAwardListResponseDTO>> queryRaffleAwardList(@RequestBody RaffleAwardListRequestDTO requestDTO) {
         try {
-            log.info("查询抽奖奖品列表配置开始 strategyId：{}", requestDTO.getStrategyId());
+            log.info("查询抽奖奖品列表配开始 strategyId：{}", requestDTO.getStrategyId());
             // 查询奖品配置
             List<StrategyAwardEntity> strategyAwardEntities = raffleAward.queryRaffleStrategyAwardList(requestDTO.getStrategyId());
             List<RaffleAwardListResponseDTO> raffleAwardListResponseDTOS = new ArrayList<>(strategyAwardEntities.size());
@@ -121,7 +123,7 @@ public class RaffleController implements IRaffleService {
         try {
             log.info("随机抽奖开始 strategyId: {}", requestDTO.getStrategyId());
             // 调用抽奖接口
-            RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()//调用抽奖方法模板
+            RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()
                     .userId("system")
                     .strategyId(requestDTO.getStrategyId())
                     .build());

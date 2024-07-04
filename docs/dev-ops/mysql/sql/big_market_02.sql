@@ -86,4 +86,3 @@ CREATE TABLE `raffle_activity_order` (
                                          UNIQUE KEY `uq_order_id` (`order_id`),
                                          KEY `idx_user_id_activity_id` (`user_id`,`activity_id`,`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽奖活动单';
-

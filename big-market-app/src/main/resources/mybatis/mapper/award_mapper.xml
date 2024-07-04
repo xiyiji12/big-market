@@ -14,7 +14,7 @@
 
     <select id="queryAwardList"  resultMap="dataMap">
         SELECT award_id, award_key, award_config, award_desc
-        FROM big_market.award
+        FROM award
         limit 10
     </select>
 
