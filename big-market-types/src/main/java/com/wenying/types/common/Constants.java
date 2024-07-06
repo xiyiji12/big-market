@@ -24,6 +24,8 @@ public class Constants {
         public static String RULE_TREE_VO_KEY = "rule_tree_vo_key_";
         public static String STRATEGY_AWARD_COUNT_KEY = "strategy_award_count_key";//策略奖品数量缓存的key
         public static String STRATEGY_AWARD_COUNT_QUEUE_KEY = "strategy_award_count_queue_key";//奖品信息写在队列里
+        public static String ACTIVITY_SKU_COUNT_QUEUE_KEY = "activity_sku_count_queue_key_";//sku的队列
+        public static String ACTIVITY_SKU_STOCK_COUNT_KEY = "activity_sku_stock_count_key_";//缓存库存
     }
 
 }

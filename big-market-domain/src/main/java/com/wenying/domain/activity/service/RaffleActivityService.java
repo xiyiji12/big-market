@@ -2,6 +2,7 @@ package com.wenying.domain.activity.service;
 
 import com.wenying.domain.activity.model.aggregate.CreateOrderAggregate;
 import com.wenying.domain.activity.model.entity.*;
+import com.wenying.domain.activity.model.valobj.ActivitySkuStockKeyVO;
 import com.wenying.domain.activity.model.valobj.OrderStateVO;
 import com.wenying.domain.activity.repository.IActivityRepository;
 import com.wenying.domain.activity.service.rule.factory.DefaultActivityChainFactory;
@@ -14,7 +15,7 @@ import java.util.Date;
  * @description 抽奖活动服务 是抽象类定义的抽象接口由此类实现。
  */
 @Service
-public class RaffleActivityService extends AbstractRaffleActivity {
+public class RaffleActivityService extends AbstractRaffleActivity implements ISkuStock {
 
 
     public RaffleActivityService(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
@@ -49,7 +50,7 @@ public class RaffleActivityService extends AbstractRaffleActivity {
 
 
         //构建聚合对象
-       return CreateOrderAggregate.builder()
+        return CreateOrderAggregate.builder()
                 .userId(activityOrderEntity.getUserId())
                 .activityId(activityOrderEntity.getActivityId())
                 .totalCount(activityOrderEntity.getTotalCount())
@@ -57,5 +58,25 @@ public class RaffleActivityService extends AbstractRaffleActivity {
                 .monthCount(activityOrderEntity.getMonthCount())
                 .activityOrderEntity(activityOrderEntity)
                 .build();
+    }
+
+    @Override
+    public ActivitySkuStockKeyVO takeQueueValue() throws InterruptedException {
+        return activityRepository.takeQueueValue();
+    }
+
+    @Override
+    public void clearQueueValue() {
+        activityRepository.clearQueueValue();
+    }
+
+    @Override
+    public void updateActivitySkuStock(Long sku) {
+        activityRepository.updateActivitySkuStock(sku);
+    }
+
+    @Override
+    public void clearActivitySkuStock(Long sku) {
+        activityRepository.clearActivitySkuStock(sku);
     }
 }
