@@ -1,20 +1,23 @@
 package com.wenying.infrastructure.persistent.repository;
 
+import cn.bugstack.middleware.db.router.strategy.IDBRouterStrategy;
+import com.wenying.domain.activity.model.aggregate.CreateOrderAggregate;
 import com.wenying.domain.activity.model.entity.ActivityCountEntity;
 import com.wenying.domain.activity.model.entity.ActivityEntity;
+import com.wenying.domain.activity.model.entity.ActivityOrderEntity;
 import com.wenying.domain.activity.model.entity.ActivitySkuEntity;
 import com.wenying.domain.activity.model.valobj.ActivityStateVO;
 import com.wenying.domain.activity.repository.IActivityRepository;
-import com.wenying.infrastructure.persistent.dao.IRaffleActivityCountDao;
-import com.wenying.infrastructure.persistent.dao.IRaffleActivityDao;
-import com.wenying.infrastructure.persistent.dao.IRaffleActivitySkuDao;
-import com.wenying.infrastructure.persistent.po.RaffleActivity;
-import com.wenying.infrastructure.persistent.po.RaffleActivityCount;
-import com.wenying.infrastructure.persistent.po.RaffleActivitySku;
+import com.wenying.infrastructure.persistent.dao.*;
+import com.wenying.infrastructure.persistent.po.*;
 import com.wenying.infrastructure.persistent.redis.IRedisService;
 import com.wenying.types.common.Constants;
+import com.wenying.types.enums.ResponseCode;
+import com.wenying.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 
@@ -33,6 +36,18 @@ public class ActivityRepository implements IActivityRepository {
     private IRaffleActivityDao raffleActivityDao;
     @Resource
     private IRaffleActivityCountDao raffleActivityCountDao;
+
+    @Resource
+    private IRaffleActivityOrderDao raffleActivityOrderDao;
+
+    @Resource
+    private IRaffleActivityAccountDao raffleActivityAccountDao;
+
+    @Resource
+    private TransactionTemplate transactionTemplate;
+
+    @Resource
+    private IDBRouterStrategy dbRouter;
 
     /**
      * 查sku
@@ -104,5 +119,66 @@ public class ActivityRepository implements IActivityRepository {
         //写入缓存
         redisService.setValue(cacheKey, activityCountEntity);
         return activityCountEntity;
+    }
+
+    /**
+     * 查订单
+     *
+     * @param createOrderAggregate
+     */
+    @Override
+    public void doSaveOrder(CreateOrderAggregate createOrderAggregate) {
+        //先从聚合对象拿出订单对象
+        ActivityOrderEntity activityOrderEntity = createOrderAggregate.getActivityOrderEntity();
+        //再转为持久层订单实体对象
+        RaffleActivityOrder raffleActivityOrder = new RaffleActivityOrder();
+        raffleActivityOrder.setUserId(activityOrderEntity.getUserId());
+        raffleActivityOrder.setSku(activityOrderEntity.getSku());
+        raffleActivityOrder.setActivityId(activityOrderEntity.getActivityId());
+        raffleActivityOrder.setActivityName(activityOrderEntity.getActivityName());
+        raffleActivityOrder.setStrategyId(activityOrderEntity.getStrategyId());
+        raffleActivityOrder.setOrderId(activityOrderEntity.getOrderId());
+        raffleActivityOrder.setOrderTime(activityOrderEntity.getOrderTime());
+        raffleActivityOrder.setTotalCount(activityOrderEntity.getTotalCount());
+        raffleActivityOrder.setDayCount(activityOrderEntity.getDayCount());
+        raffleActivityOrder.setMonthCount(activityOrderEntity.getMonthCount());
+        raffleActivityOrder.setState(activityOrderEntity.getState().getCode());
+        raffleActivityOrder.setOutBusinessNo(activityOrderEntity.getOutBusinessNo());
+
+        //账户对象
+        RaffleActivityAccount raffleActivityAccount = new RaffleActivityAccount();
+        raffleActivityAccount.setUserId(createOrderAggregate.getUserId());
+        raffleActivityAccount.setActivityId(createOrderAggregate.getActivityId());
+        raffleActivityAccount.setTotalCount(createOrderAggregate.getTotalCount());
+        raffleActivityAccount.setTotalCountSurplus(createOrderAggregate.getTotalCount());
+        raffleActivityAccount.setDayCount(createOrderAggregate.getDayCount());
+        raffleActivityAccount.setDayCountSurplus(createOrderAggregate.getDayCount());
+        raffleActivityAccount.setMonthCount(createOrderAggregate.getMonthCount());
+        raffleActivityAccount.setMonthCountSurplus(createOrderAggregate.getMonthCount());
+
+        try {
+            //以用户id作为切分键，通过doRouter设定路由【这样就保证了下面的操作，都是同一个链接下，就保证了事务的特性】
+            dbRouter.doRouter(createOrderAggregate.getUserId());
+            //编程式事务
+            transactionTemplate.execute(status -> {
+                try {
+                    // 1.写入订单
+                    raffleActivityOrderDao.insert(raffleActivityOrder);
+                    // 2.更新账户
+                    int count = raffleActivityAccountDao.updateAccountQuota(raffleActivityAccount);
+                    // 3.创建账户 - 更新为0，则账户不存在，创建新账户
+                    if (0 == count) {
+                        raffleActivityAccountDao.insert(raffleActivityAccount);
+                    }
+                    return 1;
+                } catch (DuplicateKeyException e) {
+                    log.error("写入订单记录，唯一索引冲突 userId: {} activityId: {} sku: {}", activityOrderEntity.getUserId(), activityOrderEntity.getActivityId(), activityOrderEntity.getSku());
+                    throw new AppException(ResponseCode.INDEX_DUP.getCode());
+                }
+            });
+        } finally {
+            dbRouter.clear();
+        }
+
     }
 }

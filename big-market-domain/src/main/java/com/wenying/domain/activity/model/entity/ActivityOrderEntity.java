@@ -21,6 +21,10 @@ public class ActivityOrderEntity {
      * 用户ID
      */
     private String userId;
+    /**
+     * 商品sku- activity + activity count
+     */
+    private Long sku;
 
     /**
      * 活动ID
@@ -66,5 +70,9 @@ public class ActivityOrderEntity {
      * 订单状态
      */
     private OrderStateVO state;
+    /**
+     * 幂等业务单号，外部谁充值谁透传，保证幂等（多次调用也能确保结果唯一，不会多次充值）
+     */
+    private String outBusinessNo;
 
 }
