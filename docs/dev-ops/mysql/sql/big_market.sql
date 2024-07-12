@@ -7,9 +7,8 @@
 #
 # 主机: 127.0.0.1 (MySQL 5.6.39)
 # 数据库: big_market
-# 生成时间: 2024-03-23 07:34:07 +0000
+# 生成时间: 2024-04-06 08:42:11 +0000
 # ************************************************************
-
 
 
 SET NAMES utf8mb4;
@@ -132,8 +131,7 @@ LOCK TABLES `raffle_activity_sku` WRITE;
 
 INSERT INTO `raffle_activity_sku` (`id`, `sku`, `activity_id`, `activity_count_id`, `stock_count`, `stock_count_surplus`, `create_time`, `update_time`)
 VALUES
-    (1,9011,100301,11101,20,20,'2024-03-16 11:41:09','2024-03-30 17:10:07');
-
+    (1,9011,100301,11101,20,19,'2024-03-16 11:41:09','2024-04-05 15:57:50');
 
 UNLOCK TABLES;
 
@@ -219,13 +217,13 @@ LOCK TABLES `rule_tree_node_line` WRITE;
 
 INSERT INTO `rule_tree_node_line` (`id`, `tree_id`, `rule_node_from`, `rule_node_to`, `rule_limit_type`, `rule_limit_value`, `create_time`, `update_time`)
 VALUES
-    (1,'tree_lock_1','rule_lock','rule_stock','EQUAL','ALLOW','2024-02-15 07:37:31','2024-02-15 07:55:08'),
-    (2,'tree_lock_1','rule_lock','rule_luck_award','EQUAL','TAKE_OVER','2024-02-15 07:37:31','2024-02-15 07:55:11'),
-    (3,'tree_lock_1','rule_stock','rule_luck_award','EQUAL','ALLOW','2024-02-15 07:37:31','2024-02-15 07:55:13'),
+    (1,'tree_lock_1','rule_lock','rule_stock','EQUAL','ALLOW','0000-00-00 00:00:00','2024-02-15 07:55:08'),
+    (2,'tree_lock_1','rule_lock','rule_luck_award','EQUAL','TAKE_OVER','0000-00-00 00:00:00','2024-02-15 07:55:11'),
+    (3,'tree_lock_1','rule_stock','rule_luck_award','EQUAL','ALLOW','0000-00-00 00:00:00','2024-02-15 07:55:13'),
     (4,'tree_luck_award','rule_stock','rule_luck_award','EQUAL','ALLOW','2024-02-15 07:37:31','2024-02-15 07:39:28'),
-    (5,'tree_lock_2','rule_lock','rule_stock','EQUAL','ALLOW','2024-02-15 07:37:31','2024-02-15 07:55:08'),
-    (6,'tree_lock_2','rule_lock','rule_luck_award','EQUAL','TAKE_OVER','2024-02-15 07:37:31','2024-02-15 07:55:11'),
-    (7,'tree_lock_2','rule_stock','rule_luck_award','EQUAL','ALLOW','2024-02-15 07:37:31','2024-02-15 07:55:13');
+    (5,'tree_lock_2','rule_lock','rule_stock','EQUAL','ALLOW','0000-00-00 00:00:00','2024-02-15 07:55:08'),
+    (6,'tree_lock_2','rule_lock','rule_luck_award','EQUAL','TAKE_OVER','0000-00-00 00:00:00','2024-02-15 07:55:11'),
+    (7,'tree_lock_2','rule_stock','rule_luck_award','EQUAL','ALLOW','0000-00-00 00:00:00','2024-02-15 07:55:13');
 
 UNLOCK TABLES;
 
@@ -251,7 +249,7 @@ LOCK TABLES `strategy` WRITE;
 INSERT INTO `strategy` (`id`, `strategy_id`, `strategy_desc`, `rule_models`, `create_time`, `update_time`)
 VALUES
     (1,100001,'抽奖策略','rule_blacklist,rule_weight','2023-12-09 09:37:19','2024-01-20 11:39:23'),
-    (2,100003,'抽奖策略-验证lock','rule_blacklist','2024-01-13 10:34:06','2024-01-20 15:03:19'),
+    (2,100003,'抽奖策略-验证lock',NULL,'2024-01-13 10:34:06','2024-04-03 16:03:21'),
     (3,100002,'抽奖策略-非完整1概率',NULL,'2023-12-09 09:37:19','2024-02-03 10:14:17'),
     (4,100004,'抽奖策略-随机抽奖',NULL,'2023-12-09 09:37:19','2024-01-20 19:21:03'),
     (5,100005,'抽奖策略-测试概率计算',NULL,'2023-12-09 09:37:19','2024-01-21 21:54:58'),
@@ -346,6 +344,5 @@ VALUES
     (14,100001,NULL,1,'rule_blacklist','101:user001,user002,user003','黑名单抽奖，积分兜底','2023-12-09 12:59:45','2024-02-14 18:16:20');
 
 UNLOCK TABLES;
-
 
 

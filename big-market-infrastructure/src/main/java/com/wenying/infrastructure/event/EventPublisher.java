@@ -28,4 +28,15 @@ public class EventPublisher {
         }
     }
 
+    //方法重载，已经是json类型的
+    public void publish(String topic, String eventMessageJSON) {
+        try {
+            rabbitTemplate.convertAndSend(topic, eventMessageJSON);
+            log.info("发送MQ消息 topic:{} message:{}", topic, eventMessageJSON);
+        } catch (Exception e) {
+            log.error("发送MQ消息失败 topic:{} message:{}", topic, JSON.toJSONString(eventMessageJSON), e);
+            throw e;
+        }
+    }
+
 }

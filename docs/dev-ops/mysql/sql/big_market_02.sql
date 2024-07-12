@@ -7,7 +7,7 @@
 #
 # 主机: 127.0.0.1 (MySQL 5.6.39)
 # 数据库: big_market_02
-# 生成时间: 2024-03-23 07:33:49 +0000
+# 生成时间: 2024-04-06 08:42:00 +0000
 # ************************************************************
 
 
@@ -47,6 +47,7 @@ VALUES
 
 UNLOCK TABLES;
 
+
 # 转储表 raffle_activity_account_day
 # ------------------------------------------------------------
 
@@ -84,36 +85,6 @@ CREATE TABLE `raffle_activity_account_month` (
                                                  PRIMARY KEY (`id`),
                                                  UNIQUE KEY `uq_user_id_activity_id_month` (`user_id`,`activity_id`,`month`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽奖活动账户表-月次数';
-
-
-
-
-
-# 转储表 raffle_activity_order
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `raffle_activity_order`;
-
-CREATE TABLE `raffle_activity_order` (
-                                         `id` bigint(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
-                                         `user_id` varchar(32) NOT NULL COMMENT '用户ID',
-                                         `sku` bigint(12) NOT NULL COMMENT '商品sku',
-                                         `activity_id` bigint(12) NOT NULL COMMENT '活动ID',
-                                         `activity_name` varchar(64) NOT NULL COMMENT '活动名称',
-                                         `strategy_id` bigint(8) NOT NULL COMMENT '抽奖策略ID',
-                                         `order_id` varchar(12) NOT NULL COMMENT '订单ID',
-                                         `order_time` datetime NOT NULL COMMENT '下单时间',
-                                         `total_count` int(8) NOT NULL COMMENT '总次数',
-                                         `day_count` int(8) NOT NULL COMMENT '日次数',
-                                         `month_count` int(8) NOT NULL COMMENT '月次数',
-                                         `state` varchar(8) NOT NULL COMMENT '订单状态（not_used、used、expire）',
-                                         `out_business_no` varchar(64) NOT NULL COMMENT '业务仿重ID - 外部透传的，确保幂等',
-                                         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-                                         `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
-                                         PRIMARY KEY (`id`),
-                                         UNIQUE KEY `uq_order_id` (`order_id`),
-                                         KEY `idx_user_id_activity_id` (`user_id`,`activity_id`,`state`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽奖活动单';
 
 
 
@@ -238,6 +209,8 @@ CREATE TABLE `raffle_activity_order_003` (
                                              KEY `idx_user_id_activity_id` (`user_id`,`activity_id`,`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='抽奖活动单';
 
+
+
 # 转储表 task
 # ------------------------------------------------------------
 
@@ -245,12 +218,17 @@ DROP TABLE IF EXISTS `task`;
 
 CREATE TABLE `task` (
                         `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '自增ID',
+                        `user_id` varchar(32) NOT NULL COMMENT '用户ID',
                         `topic` varchar(32) NOT NULL COMMENT '消息主题',
+                        `message_id` varchar(11) DEFAULT NULL COMMENT '消息编号',
                         `message` varchar(512) NOT NULL COMMENT '消息主体',
                         `state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '任务状态；create-创建、completed-完成、fail-失败',
                         `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                         `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-                        PRIMARY KEY (`id`)
+                        PRIMARY KEY (`id`),
+                        UNIQUE KEY `uq_message_id` (`message_id`),
+                        KEY `idx_state` (`state`),
+                        KEY `idx_create_time` (`update_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='任务表，发送MQ';
 
 
@@ -372,7 +350,7 @@ CREATE TABLE `user_raffle_order_000` (
                                          `strategy_id` bigint(8) NOT NULL COMMENT '抽奖策略ID',
                                          `order_id` varchar(12) NOT NULL COMMENT '订单ID',
                                          `order_time` datetime NOT NULL COMMENT '下单时间',
-                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancle-已作废',
+                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancel-已作废',
                                          `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          PRIMARY KEY (`id`),
@@ -395,7 +373,7 @@ CREATE TABLE `user_raffle_order_001` (
                                          `strategy_id` bigint(8) NOT NULL COMMENT '抽奖策略ID',
                                          `order_id` varchar(12) NOT NULL COMMENT '订单ID',
                                          `order_time` datetime NOT NULL COMMENT '下单时间',
-                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancle-已作废',
+                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancel-已作废',
                                          `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          PRIMARY KEY (`id`),
@@ -418,7 +396,7 @@ CREATE TABLE `user_raffle_order_002` (
                                          `strategy_id` bigint(8) NOT NULL COMMENT '抽奖策略ID',
                                          `order_id` varchar(12) NOT NULL COMMENT '订单ID',
                                          `order_time` datetime NOT NULL COMMENT '下单时间',
-                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancle-已作废',
+                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancel-已作废',
                                          `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          PRIMARY KEY (`id`),
@@ -441,16 +419,13 @@ CREATE TABLE `user_raffle_order_003` (
                                          `strategy_id` bigint(8) NOT NULL COMMENT '抽奖策略ID',
                                          `order_id` varchar(12) NOT NULL COMMENT '订单ID',
                                          `order_time` datetime NOT NULL COMMENT '下单时间',
-                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancle-已作废',
+                                         `order_state` varchar(16) NOT NULL DEFAULT 'create' COMMENT '订单状态；create-创建、used-已使用、cancel-已作废',
                                          `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
                                          `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
                                          PRIMARY KEY (`id`),
                                          UNIQUE KEY `uq_order_id` (`order_id`),
                                          KEY `idx_user_id_activity_id` (`user_id`,`activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户抽奖订单表';
-
-
-
 
 
 

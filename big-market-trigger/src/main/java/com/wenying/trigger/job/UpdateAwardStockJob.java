@@ -22,7 +22,6 @@ public class UpdateAwardStockJob {
     @Scheduled(cron = "0/5 * * * * ?")//每5秒执行一次
     public void exec() {
         try {
-            log.info("定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】");
             StrategyAwardStockKeyVO strategyAwardStockKeyVO = raffleStock.takeQueueValue();//拿到队列里的值
             if (null == strategyAwardStockKeyVO) return;//如果队列没值了直接退出方法5秒后进行下次判断
             //如果值不为空就更新数据库的操作
