@@ -1,5 +1,6 @@
-package com.wenying.infrastructure.persistent.po;
+package com.wenying.domain.activity.model.entity;
 
+import com.wenying.domain.activity.model.valobj.UserRaffleOrderStateVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,15 +9,13 @@ import lombok.NoArgsConstructor;
 import java.util.Date;
 
 /**
- * 用户抽奖订单表
+ * 用户抽奖订单实体对象
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRaffleOrder {
-    /** 自增ID */
-    private String id;
+public class UserRaffleOrderEntity {
     /** 用户ID */
     private String userId;
     /** 活动ID */
@@ -27,13 +26,8 @@ public class UserRaffleOrder {
     private Long strategyId;
     /** 订单ID */
     private String orderId;
-   /** 下单时间 */
+    /** 下单时间 */
     private Date orderTime;
-     /** 订单状态；create-创建、used-已使用、cancel-已作废 */
-    private String orderState;
-    /** 创建时间 */
-    private Date createTime;
-    /** 更新时间 */
-    private Date updateTime;
-
+    /** 订单状态枚举类 */
+    private UserRaffleOrderStateVO orderState;
 }

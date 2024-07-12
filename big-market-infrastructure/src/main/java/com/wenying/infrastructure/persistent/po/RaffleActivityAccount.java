@@ -1,6 +1,10 @@
 package com.wenying.infrastructure.persistent.po;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.checkerframework.checker.units.qual.N;
 
 import java.util.Date;
 
@@ -8,6 +12,9 @@ import java.util.Date;
  * @description 抽奖活动账户表 持久化对象
  */
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class RaffleActivityAccount {
 
     /**

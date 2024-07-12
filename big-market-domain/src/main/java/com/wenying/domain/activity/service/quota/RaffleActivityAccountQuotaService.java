@@ -1,11 +1,12 @@
-package com.wenying.domain.activity.service;
+package com.wenying.domain.activity.service.quota;
 
-import com.wenying.domain.activity.model.aggregate.CreateOrderAggregate;
+import com.wenying.domain.activity.model.aggregate.CreateQuotaOrderAggregate;
 import com.wenying.domain.activity.model.entity.*;
 import com.wenying.domain.activity.model.valobj.ActivitySkuStockKeyVO;
 import com.wenying.domain.activity.model.valobj.OrderStateVO;
 import com.wenying.domain.activity.repository.IActivityRepository;
-import com.wenying.domain.activity.service.rule.factory.DefaultActivityChainFactory;
+import com.wenying.domain.activity.service.IRaffleActivitySkuStockService;
+import com.wenying.domain.activity.service.quota.rule.factory.DefaultActivityChainFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +16,22 @@ import java.util.Date;
  * @description 抽奖活动服务 是抽象类定义的抽象接口由此类实现。
  */
 @Service
-public class RaffleActivityService extends AbstractRaffleActivity implements ISkuStock {
+public class RaffleActivityAccountQuotaService extends AbstractRaffleActivityAccountQuota implements IRaffleActivitySkuStockService {
 
 
-    public RaffleActivityService(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
+    public RaffleActivityAccountQuotaService(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
         super(defaultActivityChainFactory, activityRepository);
     }
 
     //实现保存订单抽象方法
     @Override
-    protected void doSaveOrder(CreateOrderAggregate createOrderAggregate) {
+    protected void doSaveOrder(CreateQuotaOrderAggregate createOrderAggregate) {
         activityRepository.doSaveOrder(createOrderAggregate);
     }
 
     //实现构建订单聚合对象抽象方法
     @Override
-    protected CreateOrderAggregate buildOrderAggregate(SkuRechargeEntity skuRechargeEntity, ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity) {
+    protected CreateQuotaOrderAggregate buildOrderAggregate(SkuRechargeEntity skuRechargeEntity, ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity) {
 
         //订单实体对象
         ActivityOrderEntity activityOrderEntity = new ActivityOrderEntity();
@@ -50,7 +51,7 @@ public class RaffleActivityService extends AbstractRaffleActivity implements ISk
 
 
         //构建聚合对象
-        return CreateOrderAggregate.builder()
+        return CreateQuotaOrderAggregate.builder()
                 .userId(activityOrderEntity.getUserId())
                 .activityId(activityOrderEntity.getActivityId())
                 .totalCount(activityOrderEntity.getTotalCount())

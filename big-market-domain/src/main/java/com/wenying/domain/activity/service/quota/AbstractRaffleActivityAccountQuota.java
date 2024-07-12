@@ -1,11 +1,12 @@
-package com.wenying.domain.activity.service;
+package com.wenying.domain.activity.service.quota;
 
 import com.alibaba.fastjson.JSON;
-import com.wenying.domain.activity.model.aggregate.CreateOrderAggregate;
+import com.wenying.domain.activity.model.aggregate.CreateQuotaOrderAggregate;
 import com.wenying.domain.activity.model.entity.*;
 import com.wenying.domain.activity.repository.IActivityRepository;
-import com.wenying.domain.activity.service.rule.IActionChain;
-import com.wenying.domain.activity.service.rule.factory.DefaultActivityChainFactory;
+import com.wenying.domain.activity.service.IRaffleActivityAccountQuotaService;
+import com.wenying.domain.activity.service.quota.rule.IActionChain;
+import com.wenying.domain.activity.service.quota.rule.factory.DefaultActivityChainFactory;
 import com.wenying.types.enums.ResponseCode;
 import com.wenying.types.exception.AppException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +16,10 @@ import org.apache.commons.lang3.StringUtils;
  * @description 抽奖活动抽象类，定义下单标准的流程，由子类实现抽象方法
  */
 @Slf4j
-public abstract class AbstractRaffleActivity extends RaffleActivitySupport implements IRaffleOrder {
+public abstract class AbstractRaffleActivityAccountQuota extends RaffleActivityAccountQuotaSupport implements IRaffleActivityAccountQuotaService {
 
 
-    public AbstractRaffleActivity(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
+    public AbstractRaffleActivityAccountQuota(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
         super(defaultActivityChainFactory, activityRepository);
     }
 
@@ -37,7 +38,7 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
     }
 
     @Override
-    public String createSkuRechargeOrder(SkuRechargeEntity skuRechargeEntity) {
+    public String createOrder(SkuRechargeEntity skuRechargeEntity) {
         // 1.参数校验
         String userId = skuRechargeEntity.getUserId();
         Long sku = skuRechargeEntity.getSku();
@@ -59,7 +60,7 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
         actionChain.action(activitySkuEntity,activityEntity,activityCountEntity);
 
         // 4.构建订单聚合对象
-       CreateOrderAggregate createOrderAggregate = buildOrderAggregate(skuRechargeEntity,activitySkuEntity,activityEntity,activityCountEntity);
+       CreateQuotaOrderAggregate createOrderAggregate = buildOrderAggregate(skuRechargeEntity,activitySkuEntity,activityEntity,activityCountEntity);
         // 5.保存订单
         doSaveOrder(createOrderAggregate);
 
@@ -68,9 +69,9 @@ public abstract class AbstractRaffleActivity extends RaffleActivitySupport imple
     }
 
     //构建订单聚合对象抽象方法
-    protected abstract void doSaveOrder(CreateOrderAggregate createOrderAggregate);
+    protected abstract void doSaveOrder(CreateQuotaOrderAggregate createOrderAggregate);
 
 
     //保存订单抽象方法
-    protected abstract CreateOrderAggregate buildOrderAggregate(SkuRechargeEntity skuRechargeEntity, ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity);
+    protected abstract CreateQuotaOrderAggregate buildOrderAggregate(SkuRechargeEntity skuRechargeEntity, ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity);
 }

@@ -204,6 +204,7 @@ CREATE TABLE `user_award_record_003` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='用户中奖记录表';
 
 
+
 # 转储表 user_raffle_order_000
 # ------------------------------------------------------------
 

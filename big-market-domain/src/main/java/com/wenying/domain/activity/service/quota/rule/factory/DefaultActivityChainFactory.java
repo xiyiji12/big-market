@@ -1,6 +1,6 @@
-package com.wenying.domain.activity.service.rule.factory;
+package com.wenying.domain.activity.service.quota.rule.factory;
 
-import com.wenying.domain.activity.service.rule.IActionChain;
+import com.wenying.domain.activity.service.quota.rule.IActionChain;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.stereotype.Service;

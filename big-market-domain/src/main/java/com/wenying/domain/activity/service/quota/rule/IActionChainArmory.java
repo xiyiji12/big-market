@@ -1,4 +1,4 @@
-package com.wenying.domain.activity.service.rule;
+package com.wenying.domain.activity.service.quota.rule;
 
 /**
  * 抽奖动作责任链装配

@@ -1,20 +1,20 @@
-package com.wenying.domain.activity.service;
+package com.wenying.domain.activity.service.quota;
 
 import com.wenying.domain.activity.model.entity.ActivityCountEntity;
 import com.wenying.domain.activity.model.entity.ActivityEntity;
 import com.wenying.domain.activity.model.entity.ActivitySkuEntity;
 import com.wenying.domain.activity.repository.IActivityRepository;
-import com.wenying.domain.activity.service.rule.factory.DefaultActivityChainFactory;
+import com.wenying.domain.activity.service.quota.rule.factory.DefaultActivityChainFactory;
 
 /**
  * 抽象活动的支撑类，给抽象类提供一些基本信息（查询操作、数据封装等）让抽象类继承
  */
-public class RaffleActivitySupport {
+public class RaffleActivityAccountQuotaSupport {
 
     protected DefaultActivityChainFactory defaultActivityChainFactory;
     protected IActivityRepository activityRepository;
 
-    public RaffleActivitySupport(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
+    public RaffleActivityAccountQuotaSupport(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
         this.defaultActivityChainFactory = defaultActivityChainFactory;
         this.activityRepository = activityRepository;
     }

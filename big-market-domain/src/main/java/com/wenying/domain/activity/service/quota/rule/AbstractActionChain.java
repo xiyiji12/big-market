@@ -1,4 +1,4 @@
-package com.wenying.domain.activity.service.rule;
+package com.wenying.domain.activity.service.quota.rule;
 
 /**
  * 下单规则责任链抽象类

@@ -1,6 +1,5 @@
-package com.wenying.domain.activity.service.rule;
+package com.wenying.domain.activity.service.quota.rule;
 
-import com.wenying.domain.activity.model.entity.ActivityAccountEntity;
 import com.wenying.domain.activity.model.entity.ActivityCountEntity;
 import com.wenying.domain.activity.model.entity.ActivityEntity;
 import com.wenying.domain.activity.model.entity.ActivitySkuEntity;

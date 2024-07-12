@@ -7,7 +7,7 @@ import com.wenying.domain.activity.model.entity.SkuRechargeEntity;
 /**
  * @description 抽奖活动订单接口也就是给用户在当前的这个活动，个人的账户上充值。比如这次是允许抽奖1次。
  */
-public interface IRaffleOrder {
+public interface IRaffleActivityAccountQuotaService {
 
     /**
      * 以sku创建抽奖活动订单，获得参与抽奖资格（可消耗的次数）
@@ -27,6 +27,6 @@ public interface IRaffleOrder {
      * @return 活动ID
      */
 
-    String createSkuRechargeOrder(SkuRechargeEntity skuRechargeEntity);
+    String createOrder(SkuRechargeEntity skuRechargeEntity);
 
 }
