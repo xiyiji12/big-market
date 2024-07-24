@@ -1,5 +1,7 @@
 package com.wenying.domain.strategy.service.armory;
 
+import java.util.Date;
+
 /**
  * 策略抽奖调度
  */
@@ -19,5 +21,5 @@ public interface IStrategyDispatch {
      * @param awardId    奖品id
      * @return  扣减结果
      */
-    Boolean subtractionAwardStock(Long strategyId, Integer awardId);
+    Boolean subtractionAwardStock(Long strategyId, Integer awardId, Date endDateTime);
 }

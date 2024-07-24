@@ -9,8 +9,11 @@ import com.wenying.domain.strategy.service.rule.chain.factory.DefaultChainFactor
 import com.wenying.domain.strategy.service.rule.tree.factory.DefaultTreeFactory;
 import com.wenying.types.enums.ResponseCode;
 import com.wenying.types.exception.AppException;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Date;
 
 /**
  * 抽奖策略抽象类:实现IRaffleStrategy接口对方法进行定制
@@ -52,7 +55,7 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
         }
 
         //3.如果默认抽奖(有兜底奖品的话)就走规则树,规则树抽奖过滤,【奖品ID，会根据抽奖次数判断、库存判断、兜底兜里返回最终的可获得奖品信息】再根据用户id和策略id和奖品id判断最终的结果
-        DefaultTreeFactory.StrategyAwardVO treeStrategyAwardVO = raffleLogicTree(userId,strategyId, chainStrategyAwardVO.getAwardId());//走子类实现的方法完成规则树抽奖得到最终的结果
+        DefaultTreeFactory.StrategyAwardVO treeStrategyAwardVO = raffleLogicTree(userId,strategyId, chainStrategyAwardVO.getAwardId(), raffleFactorEntity.getEndDateTime());//走子类实现的方法完成规则树抽奖得到最终的结果
         log.info("抽奖策略计算-规则树 {} {} {} {}",userId,strategyId,treeStrategyAwardVO.getAwardId(),treeStrategyAwardVO.getAwardRuleValue());
 
         //4.规则树抽完返回奖品奖励
@@ -87,5 +90,14 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
      */
     public abstract DefaultTreeFactory.StrategyAwardVO raffleLogicTree(String userId, Long strategyId, Integer awardId);
 
+    /**
+     * 抽奖结果过滤，决策树抽象方法
+     * @param userId     用户id
+     * @param strategyId 策略id
+     * @param awardId  奖品id
+     * @param endDateTime 活动结束时间
+     * @return  过滤结果【奖品id，会根据抽奖次数判断、库存判断、兜底返回最终的可获得奖品信息】
+     */
+    public abstract DefaultTreeFactory.StrategyAwardVO raffleLogicTree(String userId, Long strategyId, Integer awardId, Date endDateTime);
 
 }
