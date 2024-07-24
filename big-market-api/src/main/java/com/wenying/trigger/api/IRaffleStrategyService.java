@@ -2,8 +2,8 @@ package com.wenying.trigger.api;
 
 import com.wenying.trigger.api.dto.RaffleAwardListRequestDTO;
 import com.wenying.trigger.api.dto.RaffleAwardListResponseDTO;
-import com.wenying.trigger.api.dto.RaffleRequestDTO;
-import com.wenying.trigger.api.dto.RaffleResponseDTO;
+import com.wenying.trigger.api.dto.RaffleStrategyRequestDTO;
+import com.wenying.trigger.api.dto.RaffleStrategyResponseDTO;
 import com.wenying.types.model.Response;
 
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 抽奖服务接口：在触发器层实现接口
  */
-public interface IRaffleService {
+public interface IRaffleStrategyService {
 
     /**
      * 策略装配接口
@@ -32,5 +32,5 @@ public interface IRaffleService {
      * @param requestDTO 请求参数
      * @return 抽奖结果
      */
-    Response<RaffleResponseDTO> randomRaffle(RaffleRequestDTO requestDTO);
+    Response<RaffleStrategyResponseDTO> randomRaffle(RaffleStrategyRequestDTO requestDTO);
 }

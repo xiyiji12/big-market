@@ -6,6 +6,7 @@ import com.wenying.domain.activity.model.entity.*;
 import com.wenying.domain.activity.model.valobj.ActivitySkuStockKeyVO;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 活动仓储接口,定义规范，在持久层实现
@@ -43,4 +44,6 @@ public interface IActivityRepository {
     ActivityAccountMonthEntity queryActivityAccountMonthByUserId(String userId, Long activityId,String month);
 
     ActivityAccountDayEntity queryActivityAccountDayByUserId(String userId, Long activityId,String day);
+
+    List<ActivitySkuEntity> queryActivitySkuListByActivityId(Long activityId);
 }
