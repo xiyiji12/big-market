@@ -31,12 +31,13 @@ import java.util.Date;
 @CrossOrigin("${app.config.cross-origin}")
 @RequestMapping("/api/${app.config.api-version}/raffle/activity")
 public class RaffleActivityController implements IRaffleActivityService {
+
     @Resource
-    private IRaffleActivityPartakeService raffleActivityPartakeService;//抽奖活动参与服务
+    private IRaffleActivityPartakeService raffleActivityPartakeService;
     @Resource
-    private IRaffleStrategy raffleStrategy;//抽奖策略
+    private IRaffleStrategy raffleStrategy;
     @Resource
-    private IAwardService awardService;//奖品操作-最后写入奖品
+    private IAwardService awardService;
     @Resource
     private IActivityArmory activityArmory;
     @Resource
@@ -50,9 +51,9 @@ public class RaffleActivityController implements IRaffleActivityService {
      * <p>
      * 接口：<a href="http://localhost:8091/api/v1/raffle/activity/armory">/api/v1/raffle/activity/armory</a>
      * 入参：{"activityId":100001,"userId":"xiaofuge"}
-     *
+     * <p>
      * curl --request GET \
-     *   --url 'http://localhost:8091/api/v1/raffle/activity/armory?activityId=100301'
+     * --url 'http://localhost:8091/api/v1/raffle/activity/armory?activityId=100301'
      */
     @RequestMapping(value = "armory", method = RequestMethod.GET)
     @Override
@@ -80,20 +81,20 @@ public class RaffleActivityController implements IRaffleActivityService {
     }
 
     /**
-     * 抽奖接口:串联抽奖接口的流程
+     * 抽奖接口
      *
      * @param request 请求对象
      * @return 抽奖结果
      * <p>
      * 接口：<a href="http://localhost:8091/api/v1/raffle/activity/draw">/api/v1/raffle/activity/draw</a>
      * 入参：{"activityId":100001,"userId":"xiaofuge"}
-     *
+     * <p>
      * curl --request POST \
-     *   --url http://localhost:8091/api/v1/raffle/activity/draw \
-     *   --header 'content-type: application/json' \
-     *   --data '{
-     *     "userId":"xiaofuge",
-     *     "activityId": 100301
+     * --url http://localhost:8091/api/v1/raffle/activity/draw \
+     * --header 'content-type: application/json' \
+     * --data '{
+     * "userId":"xiaofuge",
+     * "activityId": 100301
      * }'
      */
     @RequestMapping(value = "draw", method = RequestMethod.POST)
@@ -112,7 +113,7 @@ public class RaffleActivityController implements IRaffleActivityService {
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()
                     .userId(orderEntity.getUserId())
                     .strategyId(orderEntity.getStrategyId())
-                            .endDateTime(orderEntity.getEndDateTime())
+                    .endDateTime(orderEntity.getEndDateTime())
                     .build());
             // 4. 存放结果 - 写入中奖记录
             UserAwardRecordEntity userAwardRecord = UserAwardRecordEntity.builder()
@@ -150,5 +151,4 @@ public class RaffleActivityController implements IRaffleActivityService {
                     .build();
         }
     }
-
 }

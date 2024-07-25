@@ -15,7 +15,6 @@
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
     </resultMap>
-
     <insert id="insert" parameterType="com.wenying.infrastructure.persistent.po.RaffleActivityAccount">
         insert into raffle_activity_account
         (user_id, activity_id, total_count, total_count_surplus, day_count,
@@ -47,11 +46,20 @@
 
     <update id="updateActivityAccountSubtractionQuota" parameterType="com.wenying.infrastructure.persistent.po.RaffleActivityAccount">
         update raffle_activity_account
-        set total_count_surplus = total_count_surplus - 1,
-            day_count_surplus = day_count_surplus - 1,
-            month_count_surplus = month_count_surplus - 1,
-            update_time = now()
-        where user_id = #{userId} and activity_id = #{activityId} and total_count_surplus > 0 and day_count_surplus > 0 and month_count_surplus > 0
+        set total_count_surplus = total_count_surplus - 1, update_time = now()
+        where user_id = #{userId} and activity_id = #{activityId} and total_count_surplus > 0
+    </update>
+
+    <update id="updateActivityAccountMonthSubtractionQuota" parameterType="com.wenying.infrastructure.persistent.po.RaffleActivityAccount">
+        update raffle_activity_account
+        set month_count_surplus = month_count_surplus - 1, update_time = now()
+        where user_id = #{userId} and activity_id = #{activityId} and month_count_surplus > 0
+    </update>
+
+    <update id="updateActivityAccountDaySubtractionQuota" parameterType="com.wenying.infrastructure.persistent.po.RaffleActivityAccount">
+        update raffle_activity_account
+        set day_count_surplus = day_count_surplus - 1, update_time = now()
+        where user_id = #{userId} and activity_id = #{activityId} and day_count_surplus > 0
     </update>
 
     <update id="updateActivityAccountMonthSurplusImageQuota" parameterType="com.wenying.infrastructure.persistent.po.RaffleActivityAccount">
@@ -66,6 +74,5 @@
         where user_id = #{userId} and activity_id = #{activityId}
     </update>
 
-
-
 </mapper>
+
