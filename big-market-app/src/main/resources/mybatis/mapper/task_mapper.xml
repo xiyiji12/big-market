@@ -21,8 +21,8 @@
                  )
     </insert>
 
-    <update id="updateTaskSendMessageCompleted"
-            parameterType="com.wenying.infrastructure.persistent.po.UserAwardRecord">
+
+    <update id="updateTaskSendMessageCompleted" parameterType="com.wenying.infrastructure.persistent.po.UserAwardRecord">
         update big_market_01.task
         set state = 'completed', update_time = now()
         where user_id = #{userId} and message_id = #{messageId}
