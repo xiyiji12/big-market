@@ -19,11 +19,9 @@ import java.util.Date;
 @Component("activity_base_action")
 public class ActivityBaseActionChain extends AbstractActionChain {
 
-
     @Override
     public boolean action(ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity) {
-
-        log.info("活动责任链-基础信息【有效期、状态、库存(sku)】校验开始。sku:{} activityId:{}",activitySkuEntity.getSku(),activityEntity.getActivityId());
+        log.info("活动责任链-基础信息【有效期、状态、库存(sku)】校验开始。sku:{} activityId:{}", activitySkuEntity.getSku(), activityEntity.getActivityId());
         // 校验；活动状态
         if (!ActivityStateVO.open.equals(activityEntity.getState())) {
             throw new AppException(ResponseCode.ACTIVITY_STATE_ERROR.getCode(), ResponseCode.ACTIVITY_STATE_ERROR.getInfo());
@@ -38,6 +36,6 @@ public class ActivityBaseActionChain extends AbstractActionChain {
             throw new AppException(ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getCode(), ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getInfo());
         }
         return next().action(activitySkuEntity, activityEntity, activityCountEntity);
-
     }
+
 }

@@ -1,6 +1,7 @@
 package com.wenying.domain.rebate.repository;
 
 import com.wenying.domain.rebate.model.aggregate.BehaviorRebateAggregate;
+import com.wenying.domain.rebate.model.entity.BehaviorRebateOrderEntity;
 import com.wenying.domain.rebate.model.valobj.BehaviorTypeVO;
 import com.wenying.domain.rebate.model.valobj.DailyBehaviorRebateVO;
 
@@ -14,4 +15,5 @@ public interface IBehaviorRebateRepository {
     List<DailyBehaviorRebateVO> queryDailyBehaviorRebateConfig(BehaviorTypeVO behaviorTypeVO);//查询
     void saveUserRebateRecord(String userId, List<BehaviorRebateAggregate> behaviorRebateAggregates);//插入
 
+    List<BehaviorRebateOrderEntity> queryOrderByOutBusinessNo(String userId, String outBusinessNo);
 }

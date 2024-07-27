@@ -1,5 +1,8 @@
 package com.wenying.domain.strategy.service;
 
+import com.wenying.domain.strategy.model.valobj.RuleWeightVO;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,4 +17,6 @@ public interface IRaffleRule {
      * @return key 规则树，value rule_lock 加锁值
      */
     Map<String, Integer> queryAwardRuleLockCount(String[] treeIds);
+
+    List<RuleWeightVO> queryAwardRuleWeightByActivityId(Long activityId);
 }

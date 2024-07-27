@@ -4,6 +4,7 @@ import com.wenying.domain.strategy.model.entity.StrategyAwardEntity;
 import com.wenying.domain.strategy.model.entity.StrategyEntity;
 import com.wenying.domain.strategy.model.entity.StrategyRuleEntity;
 import com.wenying.domain.strategy.model.valobj.RuleTreeVO;
+import com.wenying.domain.strategy.model.valobj.RuleWeightVO;
 import com.wenying.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import com.wenying.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 
@@ -52,7 +53,7 @@ public interface IStrategyRepository {
 
     void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO);
 
-    StrategyAwardStockKeyVO takeQueueValue();
+    StrategyAwardStockKeyVO takeQueueValue() throws InterruptedException;
 
     void updateStrategyAwardStock(Long strategyId, Integer awardId);
 
@@ -63,6 +64,10 @@ public interface IStrategyRepository {
     Integer queryTodayUserRaffleCount(String userId, Long strategyId);
 
     Map<String, Integer> queryAwardRuleLockCount(String[] treeIds);
+
+    Integer queryActivityAccountTotalUseCount(String userId, Long strategyId);
+
+    List<RuleWeightVO> queryAwardRuleWeight(Long strategyId);
 }
 
 

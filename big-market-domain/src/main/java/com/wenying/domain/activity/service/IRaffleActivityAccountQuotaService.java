@@ -1,5 +1,6 @@
 package com.wenying.domain.activity.service;
 
+import com.wenying.domain.activity.model.entity.ActivityAccountEntity;
 import com.wenying.domain.activity.model.entity.ActivityOrderEntity;
 import com.wenying.domain.activity.model.entity.ActivityShopCartEntity;
 import com.wenying.domain.activity.model.entity.SkuRechargeEntity;
@@ -7,15 +8,12 @@ import com.wenying.domain.activity.model.entity.SkuRechargeEntity;
 /**
  * @description 抽奖活动订单接口也就是给用户在当前的这个活动，个人的账户上充值。比如这次是允许抽奖1次。
  */
+/**
+ * @author Fuzhengwei bugstack.cn @小傅哥
+ * @description 抽奖活动账户额度服务
+ * @create 2024-03-16 08:38
+ */
 public interface IRaffleActivityAccountQuotaService {
-
-    /**
-     * 以sku创建抽奖活动订单，获得参与抽奖资格（可消耗的次数）
-     *
-     * @param activityShopCartEntity 活动sku实体，通过sku领取活动。
-     * @return 活动参与记录实体
-     */
-    ActivityOrderEntity createRaffleActivityOrder(ActivityShopCartEntity activityShopCartEntity);
 
     /**
      * 创建 sku 账户充值订单，给用户增加抽奖次数
@@ -26,8 +24,33 @@ public interface IRaffleActivityAccountQuotaService {
      * @param skuRechargeEntity 活动商品充值实体对象
      * @return 活动ID
      */
-
     String createOrder(SkuRechargeEntity skuRechargeEntity);
 
+    /**
+     * 查询活动账户 - 总，参与次数
+     *
+     * @param activityId 活动ID
+     * @param userId     用户ID
+     * @return 参与次数
+     */
+    Integer queryRaffleActivityAccountPartakeCount(Long activityId, String userId);
+
+    /**
+     * 查询活动账户 - 日，参与次数
+     *
+     * @param activityId 活动ID
+     * @param userId     用户ID
+     * @return 参与次数
+     */
     Integer queryRaffleActivityAccountDayPartakeCount(Long activityId, String userId);
+
+    /**
+     * 查询活动账户额度「总、月、日」
+     *
+     * @param activityId 活动ID
+     * @param userId     用户ID
+     * @return 账户实体
+     */
+    ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId);
+
 }

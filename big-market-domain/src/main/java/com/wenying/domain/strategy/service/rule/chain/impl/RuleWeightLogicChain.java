@@ -21,7 +21,7 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
     private IStrategyRepository repository;
     @Resource
     protected IStrategyDispatch strategyDispatch;//默认的抽奖方法
-    private Long userScore = 0L;//模拟用户积分值
+
 
     /**
      * 权重责任链规则过滤；
@@ -44,6 +44,21 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
         Collections.sort(analyticalSortedKeys);
 
         // 3. 找出最小符合的值，也就是【4500 积分，能找到 4000:102,103,104,105】、【5000 积分，能找到 5000:102,103,104,105,106,107】
+        /* 找到最后一个符合的值[如用户传了一个 5900 应该返回正确结果为 5000]，如果使用 Lambda findFirst 需要注意使用 sorted 反转结果
+         *   Long nextValue = null;
+         *         for (Long analyticalSortedKeyValue : analyticalSortedKeys) {
+         *             if (userScore >= analyticalSortedKeyValue){
+         *                 nextValue = analyticalSortedKeyValue;
+         *             }
+         *         }
+         * 星球伙伴 @慢慢来 ID 6267 提供
+         * Long nextValue = analyticalSortedKeys.stream()
+         *      .filter(key -> userScore >= key)
+         *      .max(Comparator.naturalOrder())
+         *      .orElse(null);
+         */
+        //查询总次数-剩余次数=使用量
+        Integer userScore = repository.queryActivityAccountTotalUseCount(userId, strategyId);
         Long nextValue = analyticalSortedKeys.stream()
                 .filter(key -> userScore >= key)
                 .findFirst()

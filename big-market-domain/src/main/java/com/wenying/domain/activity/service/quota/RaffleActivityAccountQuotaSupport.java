@@ -12,23 +12,23 @@ import com.wenying.domain.activity.service.quota.rule.factory.DefaultActivityCha
 public class RaffleActivityAccountQuotaSupport {
 
     protected DefaultActivityChainFactory defaultActivityChainFactory;
+
     protected IActivityRepository activityRepository;
 
-    public RaffleActivityAccountQuotaSupport(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
-        this.defaultActivityChainFactory = defaultActivityChainFactory;
+    public RaffleActivityAccountQuotaSupport(IActivityRepository activityRepository, DefaultActivityChainFactory defaultActivityChainFactory) {
         this.activityRepository = activityRepository;
+        this.defaultActivityChainFactory = defaultActivityChainFactory;
     }
 
-    // 1. 通过sku查询活动信息
-    public ActivitySkuEntity queryActivitySku(Long sku){
+    public ActivitySkuEntity queryActivitySku(Long sku) {
         return activityRepository.queryActivitySku(sku);
     }
-    // 2. 查询活动信息
-    public ActivityEntity queryRaffleActivityByActivityId(Long activityId){
+
+    public ActivityEntity queryRaffleActivityByActivityId(Long activityId) {
         return activityRepository.queryRaffleActivityByActivityId(activityId);
     }
-    // 3. 查询次数信息（用户在活动上可参与的次数）
-    public ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId){
+
+    public ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId) {
         return activityRepository.queryRaffleActivityCountByActivityCountId(activityCountId);
     }
 

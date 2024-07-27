@@ -18,29 +18,20 @@ import java.util.Date;
 @Service
 public class RaffleActivityAccountQuotaService extends AbstractRaffleActivityAccountQuota implements IRaffleActivitySkuStockService {
 
-
-    public RaffleActivityAccountQuotaService(DefaultActivityChainFactory defaultActivityChainFactory, IActivityRepository activityRepository) {
-        super(defaultActivityChainFactory, activityRepository);
+    public RaffleActivityAccountQuotaService(IActivityRepository activityRepository, DefaultActivityChainFactory defaultActivityChainFactory) {
+        super(activityRepository, defaultActivityChainFactory);
     }
 
-    //实现保存订单抽象方法
-    @Override
-    protected void doSaveOrder(CreateQuotaOrderAggregate createOrderAggregate) {
-        activityRepository.doSaveOrder(createOrderAggregate);
-    }
-
-    //实现构建订单聚合对象抽象方法
     @Override
     protected CreateQuotaOrderAggregate buildOrderAggregate(SkuRechargeEntity skuRechargeEntity, ActivitySkuEntity activitySkuEntity, ActivityEntity activityEntity, ActivityCountEntity activityCountEntity) {
-
-        //订单实体对象
+        // 订单实体对象
         ActivityOrderEntity activityOrderEntity = new ActivityOrderEntity();
         activityOrderEntity.setUserId(skuRechargeEntity.getUserId());
         activityOrderEntity.setSku(skuRechargeEntity.getSku());
         activityOrderEntity.setActivityId(activityEntity.getActivityId());
         activityOrderEntity.setActivityName(activityEntity.getActivityName());
         activityOrderEntity.setStrategyId(activityEntity.getStrategyId());
-        //公司一般会有专门的雪花算法UUID服务，直接随机生成个12位
+        // 公司里一般会有专门的雪花算法UUID服务，我们这里直接生成个12位就可以了。
         activityOrderEntity.setOrderId(RandomStringUtils.randomNumeric(12));
         activityOrderEntity.setOrderTime(new Date());
         activityOrderEntity.setTotalCount(activityCountEntity.getTotalCount());
@@ -49,16 +40,20 @@ public class RaffleActivityAccountQuotaService extends AbstractRaffleActivityAcc
         activityOrderEntity.setState(OrderStateVO.completed);
         activityOrderEntity.setOutBusinessNo(skuRechargeEntity.getOutBusinessNo());
 
-
-        //构建聚合对象
+        // 构建聚合对象
         return CreateQuotaOrderAggregate.builder()
-                .userId(activityOrderEntity.getUserId())
-                .activityId(activityOrderEntity.getActivityId())
-                .totalCount(activityOrderEntity.getTotalCount())
-                .dayCount(activityOrderEntity.getDayCount())
-                .monthCount(activityOrderEntity.getMonthCount())
+                .userId(skuRechargeEntity.getUserId())
+                .activityId(activitySkuEntity.getActivityId())
+                .totalCount(activityCountEntity.getTotalCount())
+                .dayCount(activityCountEntity.getDayCount())
+                .monthCount(activityCountEntity.getMonthCount())
                 .activityOrderEntity(activityOrderEntity)
                 .build();
+    }
+
+    @Override
+    protected void doSaveOrder(CreateQuotaOrderAggregate createOrderAggregate) {
+        activityRepository.doSaveOrder(createOrderAggregate);
     }
 
     @Override
@@ -82,7 +77,18 @@ public class RaffleActivityAccountQuotaService extends AbstractRaffleActivityAcc
     }
 
     @Override
-    public Integer queryRaffleActivityAccountDayPartakeCount(Long activityId, String userId) {
-        return activityRepository.queryRaffleActivityAccountDayPartakeCount(activityId,userId);
+    public Integer queryRaffleActivityAccountPartakeCount(Long activityId, String userId) {
+        return activityRepository.queryRaffleActivityAccountPartakeCount(activityId, userId);
     }
+
+    @Override
+    public Integer queryRaffleActivityAccountDayPartakeCount(Long activityId, String userId) {
+        return activityRepository.queryRaffleActivityAccountDayPartakeCount(activityId, userId);
+    }
+
+    @Override
+    public ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId) {
+        return activityRepository.queryActivityAccountEntity(activityId, userId);
+    }
+
 }
