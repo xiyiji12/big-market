@@ -85,9 +85,7 @@ import java.util.concurrent.TimeUnit;
                     .activityId(raffleActivitySku.getActivityId())
                     .activityCountId(raffleActivitySku.getActivityCountId())
                     .stockCount(raffleActivitySku.getStockCount())
-                    //.stockCountSurplus(cacheSkuStock.intValue())
-                    .stockCountSurplus(raffleActivitySku.getStockCountSurplus())
-
+                    .stockCountSurplus(cacheSkuStock.intValue())
                     .build();
         }
 
@@ -167,7 +165,7 @@ import java.util.concurrent.TimeUnit;
                 RaffleActivityAccountMonth raffleActivityAccountMonth = new RaffleActivityAccountMonth();
                 raffleActivityAccountMonth.setUserId(createOrderAggregate.getUserId());
                 raffleActivityAccountMonth.setActivityId(createOrderAggregate.getActivityId());
-                raffleActivityAccountMonth.setMonth(raffleActivityAccountMonth.currentMonth());
+                raffleActivityAccountMonth.setMonth(RaffleActivityAccountMonth.currentMonth());
                 raffleActivityAccountMonth.setMonthCount(createOrderAggregate.getMonthCount());
                 raffleActivityAccountMonth.setMonthCountSurplus(createOrderAggregate.getMonthCount());
 
@@ -175,7 +173,7 @@ import java.util.concurrent.TimeUnit;
                 RaffleActivityAccountDay raffleActivityAccountDay = new RaffleActivityAccountDay();
                 raffleActivityAccountDay.setUserId(createOrderAggregate.getUserId());
                 raffleActivityAccountDay.setActivityId(createOrderAggregate.getActivityId());
-                raffleActivityAccountDay.setDay(raffleActivityAccountDay.currentDay());
+                raffleActivityAccountDay.setDay(RaffleActivityAccountDay.currentDay());
                 raffleActivityAccountDay.setDayCount(createOrderAggregate.getDayCount());
                 raffleActivityAccountDay.setDayCountSurplus(createOrderAggregate.getDayCount());
 
@@ -520,12 +518,14 @@ import java.util.concurrent.TimeUnit;
             RaffleActivityAccountMonth raffleActivityAccountMonth = raffleActivityAccountMonthDao.queryActivityAccountMonthByUserId(RaffleActivityAccountMonth.builder()
                     .activityId(activityId)
                     .userId(userId)
+                    .month(RaffleActivityAccountMonth.currentMonth())
                     .build());
 
             // 3. 查询日账户额度
             RaffleActivityAccountDay raffleActivityAccountDay = raffleActivityAccountDayDao.queryActivityAccountDayByUserId(RaffleActivityAccountDay.builder()
                     .activityId(activityId)
                     .userId(userId)
+                    .day(RaffleActivityAccountDay.currentDay())
                     .build());
 
             // 组装对象
@@ -562,6 +562,7 @@ import java.util.concurrent.TimeUnit;
                     .activityId(activityId)
                     .userId(userId)
                     .build());
+            if (null == raffleActivityAccount) return 0;
             return raffleActivityAccount.getTotalCount() - raffleActivityAccount.getTotalCountSurplus();
         }
 
